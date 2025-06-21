@@ -10,8 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DOCKER_LOGIN: ${{secret.DOCKER_LOGIN}}
-      DOCKER_PASSWORD: ${{secret.DOCKER_PASSWORD}}
+      DOCKER_LOGIN: ${{secrets.DOCKER_LOGIN}}
+      DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     steps:
     - uses: actions/checkout@v4
     - name: Login Docker 
