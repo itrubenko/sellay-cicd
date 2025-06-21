@@ -1,0 +1,11 @@
+1. Create simple app
+2. Push to repo
+3. Setup ci flow
+    Add githib action
+
+4. Setup CD flow
+    run EC2 instance
+
+
+
+https://github.com/itrubenko/sellay-cicd github
