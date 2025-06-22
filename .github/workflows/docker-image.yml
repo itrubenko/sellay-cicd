@@ -17,7 +17,7 @@ jobs:
    # - name: Login Docker 
    #   run: docker login -u $DOCKER_LOGIN -p ${DOCKER_PASSWORD}
     - name: Build the Docker image
-      run: docker build -t sellay2025/app:latest .
+      run: docker build -t sellay2025/app:latest ./../..
     - name: Push to Docker Hub image
       run: docker push sellay2025/app:latest
 
