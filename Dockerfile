@@ -8,6 +8,7 @@ FROM node:18-alpine
 COPY package*.json ./
 
 # Install dependencies
+RUN rm -rf node_modules package-lock.json
 RUN npm install
 
 # Copy the rest of the application code
