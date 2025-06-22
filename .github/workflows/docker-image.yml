@@ -17,5 +17,5 @@ jobs:
    # - name: Login Docker 
    #   run: docker login -u $DOCKER_LOGIN -p ${DOCKER_PASSWORD}
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sellay2025/app:latest
+      run: docker build ./../../. --file Dockerfile --tag sellay2025/app:latest
 
