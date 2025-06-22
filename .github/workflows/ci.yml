@@ -21,4 +21,4 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag sellay2025/app:latest
     - name: Push to docker registry
-      run: docker push sellay2025/app:$(date +%s)
+      run: docker push sellay2025/app:latest
