@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Workflow
 
 on:
   push:
@@ -6,10 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -22,3 +21,13 @@ jobs:
       run: docker build . --file Dockerfile --tag sellay2025/app:latest
     - name: Push to docker registry
       run: docker push sellay2025/app:latest
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Pull docker container
+        run: sudo docker pull sellay2025/app:latest
+      - name: Delete old docker container
+        run: sudo docker rm -f app-container || true
+      - name: Run Docker container
+        run: sudo docker run -d -p 3333:3333 --name app-container sellay2025/app

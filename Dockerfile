@@ -3,7 +3,7 @@ FROM node:18
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy dependency metadata 
+# Copy dependency metadata
 COPY package*.json ./
 
 # Install dependencies
