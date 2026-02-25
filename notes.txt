@@ -6,6 +6,8 @@
 4. Setup CD flow
     run EC2 instance
 
+5. Test
+
 
 
 https://github.com/itrubenko/sellay-cicd github
