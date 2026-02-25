@@ -6,7 +6,7 @@ server.use(cors());
 server.use(bodyParser.json());
 
 server.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello World from server.js!');
 });
 
 server.post('/data', (req, res) => {
