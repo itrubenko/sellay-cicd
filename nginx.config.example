@@ -1,0 +1,79 @@
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log notice;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+    # HTTP → HTTPS
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name sellay.click www.sellay.click;
+        return 301 https://sellay.click$request_uri;
+    }
+
+    # HTTPS redirect www → non-www
+    server {
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name www.sellay.click;
+
+        ssl_certificate /etc/letsencrypt/live/sellay.click/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/sellay.click/privkey.pem;
+        include /etc/letsencrypt/options-ssl-nginx.conf;
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+        return 301 https://sellay.click$request_uri;
+    }
+
+    # Main app
+    server {
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name sellay.click;
+
+        ssl_certificate /etc/letsencrypt/live/sellay.click/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/sellay.click/privkey.pem;
+        include /etc/letsencrypt/options-ssl-nginx.conf;
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+        location / {
+            proxy_pass http://localhost:3333;
+            proxy_http_version 1.1;
+
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+}
